@@ -39,6 +39,7 @@ extern "C" {
 #include "engine/atf_list.hpp"
 #include "engine/atf_result.hpp"
 #include "engine/exceptions.hpp"
+#include "engine/execenv/execenv.hpp"
 #include "model/test_case.hpp"
 #include "model/test_program.hpp"
 #include "model/test_result.hpp"
@@ -190,7 +191,9 @@ engine::atf_interface::exec_test(const model::test_program& test_program,
 
     args.push_back(F("-r%s") % (control_directory / result_name));
     args.push_back(test_case_name);
-    process::exec(test_program.absolute_path(), args);
+
+    engine::execenv::init(test_program, test_case_name);
+    engine::execenv::exec(test_program, test_case_name, args);
 }
 
 
@@ -219,7 +222,8 @@ engine::atf_interface::exec_cleanup(
     }
 
     args.push_back(F("%s:cleanup") % test_case_name);
-    process::exec(test_program.absolute_path(), args);
+
+    engine::execenv::exec(test_program, test_case_name, args);
 }
 
 
