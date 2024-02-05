@@ -28,5 +28,10 @@
 
 libengine_a_SOURCES += engine/execenv/execenv.hpp
 libengine_a_SOURCES += engine/execenv/execenv.cpp
+
 libengine_a_SOURCES += engine/execenv/jail.hpp
+if FreeBSD
 libengine_a_SOURCES += engine/execenv/jail.cpp
+else
+libengine_a_SOURCES += engine/execenv/jail_stub.cpp
+endif
