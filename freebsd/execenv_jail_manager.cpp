@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Igor Ostapenko <pm@igoro.pro>
+// Copyright (c) 2024 Igor Ostapenko <pm@igoro.pro>
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -25,31 +25,38 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-/// \file freebsd/engine/execenv/jail.hpp
-/// FreeBSD jail execution environment.
+#include "freebsd/execenv_jail_manager.hpp"
 
-#if !defined(FREEBSD_ENGINE_EXECENV_JAIL_HPP)
-#define FREEBSD_ENGINE_EXECENV_JAIL_HPP
+#include "model/metadata.hpp"
+#include "model/test_case.hpp"
+#include "freebsd/execenv_jail.hpp"
 
-#include "model/test_program.hpp"
-#include "utils/defs.hpp"
-#include "utils/process/operations_fwd.hpp"
+static const std::string execenv_name = "jail";
 
-namespace engine {
-namespace execenv {
-namespace jail {
-
-
-void init(const model::test_program&, const std::string&);
-
-void exec(const model::test_program&, const std::string&,
-          const utils::process::args_vector&) throw() UTILS_NORETURN;
-
-void cleanup(const model::test_program&, const std::string&);
+const std::string&
+freebsd::execenv_jail_manager::name() const
+{
+    return execenv_name;
+}
 
 
-}  // namespace jail
-}  // namespace execenv
-}  // namespace engine
+bool
+freebsd::execenv_jail_manager::is_supported() const
+{
+    return freebsd::execenv_jail_supported;
+}
 
-#endif  // !defined(FREEBSD_ENGINE_EXECENV_JAIL_HPP)
+
+std::unique_ptr< execenv::interface >
+freebsd::execenv_jail_manager::probe(
+    const model::test_program& test_program,
+    const std::string& test_case_name) const
+{
+    auto test_case = test_program.find(test_case_name);
+    if (test_case.get_metadata().execenv() != execenv_name)
+        return nullptr;
+
+    return std::unique_ptr< execenv::interface >(
+        new freebsd::execenv_jail(test_program, test_case_name)
+    );
+}
