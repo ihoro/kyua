@@ -63,6 +63,12 @@ public:
     virtual const std::string& description() const = 0;
 
     /// Runs the requirement resolver.
+    ///
+    /// \param ui Object to interact with the I/O of the program.
+    /// \param cmdline Representation of the command line to the subcommand.
+    /// \param user_config The runtime configuration of the program.
+    ///
+    /// \return 0 to indicate success.
     virtual int exec(cmdline::ui*, const cmdline::parsed_cmdline&,
                      const config::tree&) const = 0;
 };
