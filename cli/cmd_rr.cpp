@@ -29,9 +29,13 @@
 #include "cli/cmd_rr.hpp"
 
 #include "cli/common.ipp"
+#include "engine/rr/rr.hpp"
+#include "utils/cmdline/parser.ipp"
+#include "utils/cmdline/ui.hpp"
 
 namespace cmdline = utils::cmdline;
 namespace config = utils::config;
+namespace rr = engine::rr;
 
 using cli::cmd_rr;
 
@@ -53,8 +57,17 @@ cmd_rr::cmd_rr(void) : cli_command(
 ///
 /// \return 0 if successful, 1 otherwise.
 int
-cmd_rr::run(cmdline::ui* /*ui*/, const cmdline::parsed_cmdline& /*cmdline*/,
+cmd_rr::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
               const config::tree& /*user_config*/)
 {
-    return 0;
+    if (cmdline.arguments().empty()) {
+        for (auto r : rr::resolvers()) {
+            ui->out(r->name(), false);
+            ui->out("\t\t\t", false);
+            ui->out(r->description());
+        }
+        return EXIT_SUCCESS;
+    }
+
+    return EXIT_SUCCESS;
 }
