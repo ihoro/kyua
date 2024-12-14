@@ -50,6 +50,8 @@ libcli_la_SOURCES += cli/cmd_report_html.cpp
 libcli_la_SOURCES += cli/cmd_report_html.hpp
 libcli_la_SOURCES += cli/cmd_report_junit.cpp
 libcli_la_SOURCES += cli/cmd_report_junit.hpp
+libcli_la_SOURCES += cli/cmd_rr.cpp
+libcli_la_SOURCES += cli/cmd_rr.hpp
 libcli_la_SOURCES += cli/cmd_test.cpp
 libcli_la_SOURCES += cli/cmd_test.hpp
 libcli_la_SOURCES += cli/common.cpp
@@ -100,6 +102,11 @@ tests_cli_PROGRAMS += cli/cmd_list_test
 cli_cmd_list_test_SOURCES = cli/cmd_list_test.cpp
 cli_cmd_list_test_CXXFLAGS = $(CLI_CFLAGS) $(ATF_CXX_CFLAGS)
 cli_cmd_list_test_LDADD = $(CLI_LIBS) $(ATF_CXX_LIBS)
+
+tests_cli_PROGRAMS += cli/cmd_rr_test
+cli_cmd_rr_test_SOURCES = cli/cmd_rr_test.cpp
+cli_cmd_rr_test_CXXFLAGS = $(CLI_CFLAGS) $(ATF_CXX_CFLAGS)
+cli_cmd_rr_test_LDADD = $(CLI_LIBS) $(ATF_CXX_LIBS)
 
 tests_cli_PROGRAMS += cli/cmd_test_test
 cli_cmd_test_test_SOURCES = cli/cmd_test_test.cpp
