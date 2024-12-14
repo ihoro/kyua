@@ -30,8 +30,7 @@
 
 #include "cli/common.ipp"
 #include "engine/rr/rr.hpp"
-#include "utils/cmdline/parser.ipp"
-#include "utils/cmdline/ui.hpp"
+#include "utils/format/macros.hpp"
 
 namespace cmdline = utils::cmdline;
 namespace config = utils::config;
@@ -58,8 +57,9 @@ cmd_rr::cmd_rr(void) : cli_command(
 /// \return 0 if successful, 1 otherwise.
 int
 cmd_rr::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
-              const config::tree& /*user_config*/)
+            const config::tree& user_config)
 {
+    // List available resolvers
     if (cmdline.arguments().empty()) {
         for (auto r : rr::resolvers()) {
             ui->out(r->name(), false);
@@ -69,5 +69,23 @@ cmd_rr::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
         return EXIT_SUCCESS;
     }
 
-    return EXIT_SUCCESS;
+    // Or run specified ones
+    int error = EXIT_SUCCESS;
+    for (auto rname : cmdline.arguments()) {
+        std::shared_ptr< rr::interface > resolver = nullptr;
+        for (auto r : rr::resolvers())
+            if (r->name() == rname) {
+                resolver = r;
+                break;
+            }
+        if (resolver == nullptr) {
+            ui->out(F("Unknown requirement resolver: %s") % rname);
+            return EXIT_FAILURE;
+        }
+        error = resolver->exec(ui, cmdline, user_config);
+        if (error != EXIT_SUCCESS)
+            break;
+    }
+
+    return error;
 }

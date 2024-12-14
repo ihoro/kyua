@@ -26,61 +26,29 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-/// \file engine/rr/rr.hpp
-/// Requirement resolver subsystem interface.
+/// \file os/freebsd/rr_kmods.hpp
+/// FreeBSD requirement resolver of required_kmods.
 
-#if !defined(ENGINE_RR_RR_HPP)
-#define ENGINE_RR_RR_HPP
+#if !defined(FREEBSD_RR_KMODS_HPP)
+#define FREEBSD_RR_KMODS_HPP
 
-#include <string>
-#include <vector>
+#include "engine/rr/rr.hpp"
 
-#include "utils/cmdline/parser.ipp"
-#include "utils/cmdline/ui.hpp"
-#include "utils/config/tree.ipp"
-
-namespace cmdline = utils::cmdline;
-namespace config = utils::config;
+namespace rr = engine::rr;
 
 
-namespace engine {
-namespace rr {
+namespace freebsd {
 
 
-/// Abstract interface of a requirement resolver.
-class interface {
+class rr_kmods : public rr::interface {
 public:
-    /// Constructor.
-    interface() {}
-
-    /// Destructor.
-    virtual ~interface() {}
-
-    /// Returns name of the resolver.
-    virtual const std::string& name() const = 0;
-
-    /// Returns short description of the resolver.
-    virtual const std::string& description() const = 0;
-
-    /// Runs the requirement resolver.
-    virtual int exec(cmdline::ui*, const cmdline::parsed_cmdline&,
-                     const config::tree&) const = 0;
+    const std::string& name() const;
+    const std::string& description() const;
+    int exec(cmdline::ui*, const cmdline::parsed_cmdline&,
+             const config::tree&) const;
 };
 
 
-/// Registers a requirement resolver.
-///
-/// \param resolver A requirement resolver.
-void register_resolver(const std::shared_ptr< interface > resolver);
+}  // namespace freebsd
 
-
-/// Returns the list of registered requirement resolvers.
-///
-/// \return A vector of pointers to requirement resolvers.
-const std::vector< std::shared_ptr< interface > > resolvers();
-
-
-}  // namespace rr
-}  // namespace engine
-
-#endif  // !defined(ENGINE_RR_RR_HPP)
+#endif  // !defined(FREEBSD_RR_KMODS_HPP)
