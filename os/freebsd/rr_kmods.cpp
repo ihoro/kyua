@@ -35,6 +35,12 @@
 #include "model/test_case.hpp"
 #include "model/test_program.hpp"
 
+// FreeBSD kldload syscall
+extern "C" {
+#include <sys/param.h>
+#include <sys/linker.h>
+}
+
 
 namespace {
 
@@ -96,16 +102,32 @@ int
 rr_kmods::exec(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
                const config::tree& user_config) const
 {
+    // Collect required modules
     std::set< std::string > modules;
     list_hooks hooks(modules);
-
     const std::set< engine::test_filter > nofilters;
     const drivers::list_tests::result result = drivers::list_tests::drive(
         cli::kyuafile_path(cmdline), cli::build_root_path(cmdline),
         nofilters, user_config, hooks);
 
+    // Nothing to do
+    if (modules.empty())
+        return EXIT_SUCCESS;
+
+    // Announce the work
+    ui->out("kldload", false);
     for (auto m : modules)
-        ui->out(m);
+        ui->out(F(" %s") % m, false);
+    ui->out("");
+
+    // Load the modules
+    for (auto m : modules) {
+        if (::kldload(m.c_str()) != -1 || errno == EEXIST)
+            continue;
+        ui->err(F("kldload %s: ") % m, false);
+        ui->err(strerror(errno));
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
