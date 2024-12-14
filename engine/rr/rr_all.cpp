@@ -49,7 +49,8 @@ rr::rr_all::description() const
 
 
 int
-rr::rr_all::exec() const
+rr::rr_all::exec(cmdline::ui*, const cmdline::parsed_cmdline&,
+                 const config::tree&) const
 {
     return 0;
 }

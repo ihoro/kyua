@@ -26,10 +26,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-ENGINE_RR_CFLAGS = $(MODEL_CFLAGS)
-ENGINE_RR_LIBS = libengine_rr.la $(MODEL_LIBS)
+ENGINE_RR_CFLAGS = $(MODEL_CFLAGS) $(LUTOK_CFLAGS)
+ENGINE_RR_LIBS = libengine_rr.la $(MODEL_LIBS) $(LUTOK_LIBS)
 
 noinst_LTLIBRARIES += libengine_rr.la
+libengine_rr_la_CPPFLAGS = $(LUTOK_CFLAGS)
 libengine_rr_la_SOURCES  = engine/rr/rr.hpp
 libengine_rr_la_SOURCES += engine/rr/rr.cpp
 libengine_rr_la_SOURCES += engine/rr/rr_all.hpp

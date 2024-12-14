@@ -42,7 +42,8 @@ class rr_all : public rr::interface {
 public:
     const std::string& name() const;
     const std::string& description() const;
-    int exec() const;
+    int exec(cmdline::ui*, const cmdline::parsed_cmdline&,
+             const config::tree&) const;
 };
 
 

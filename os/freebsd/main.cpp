@@ -31,7 +31,12 @@
 #include "engine/execenv/execenv.hpp"
 #include "os/freebsd/execenv_jail_manager.hpp"
 
+#include "engine/rr/rr.hpp"
+#include "os/freebsd/rr_kmods.hpp"
+
 namespace execenv = engine::execenv;
+namespace rr = engine::rr;
+
 
 /// FreeBSD related features initialization.
 ///
@@ -49,6 +54,10 @@ freebsd::main(const int, const char* const* const)
     execenv::register_execenv(
         std::shared_ptr< execenv::manager >(new freebsd::execenv_jail_manager())
     );
+
+#ifdef __FreeBSD__
+    rr::register_resolver(std::shared_ptr< rr::interface >(new freebsd::rr_kmods()));
+#endif
 
     return 0;
 }
