@@ -49,8 +49,16 @@ rr::rr_all::description() const
 
 
 int
-rr::rr_all::exec(cmdline::ui*, const cmdline::parsed_cmdline&,
-                 const config::tree&) const
+rr::rr_all::exec(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
+                 const config::tree& user_config) const
 {
-    return 0;
+    for (auto r : rr::resolvers()) {
+        if (r->name() == this->name())
+            continue;
+
+        if (r->exec(ui, cmdline, user_config) != EXIT_SUCCESS)
+            return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }
