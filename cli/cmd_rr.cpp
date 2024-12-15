@@ -31,7 +31,6 @@
 #include "cli/common.ipp"
 #include "engine/rr/rr.hpp"
 #include "utils/cmdline/options.hpp"
-#include "utils/format/macros.hpp"
 
 namespace cmdline = utils::cmdline;
 namespace config = utils::config;
@@ -72,22 +71,5 @@ cmd_rr::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
     }
 
     // Or run specified ones
-    int error = EXIT_SUCCESS;
-    for (auto rname : cmdline.arguments()) {
-        std::shared_ptr< rr::interface > resolver = nullptr;
-        for (auto r : rr::resolvers())
-            if (r->name() == rname) {
-                resolver = r;
-                break;
-            }
-        if (resolver == nullptr) {
-            ui->out(F("Unknown requirement resolver: %s") % rname);
-            return EXIT_FAILURE;
-        }
-        error = resolver->exec(ui, cmdline, user_config);
-        if (error != EXIT_SUCCESS)
-            break;
-    }
-
-    return error;
+    return rr::run(cmdline.arguments(), ui, cmdline, user_config);
 }
