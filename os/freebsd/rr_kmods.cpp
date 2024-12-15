@@ -120,6 +120,9 @@ rr_kmods::exec(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
         ui->out(F(" %s") % m, false);
     ui->out("");
 
+    if (cmdline.has_option("dry-run"))
+        return EXIT_SUCCESS;
+
     // Load the modules
     for (auto m : modules) {
         if (::kldload(m.c_str()) != -1 || errno == EEXIST)

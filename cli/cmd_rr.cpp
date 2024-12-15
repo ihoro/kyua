@@ -44,8 +44,9 @@ using cli::cmd_rr;
 cmd_rr::cmd_rr(void) : cli_command(
     "rr", "[resolver-name ...]", 0, -1, "Run requirement resolvers")
 {
-    add_option(build_root_option);
     add_option(kyuafile_option);
+    add_option(build_root_option);
+    add_option(cmdline::bool_option('n', "dry-run", "Do not alter the system"));
 }
 
 
