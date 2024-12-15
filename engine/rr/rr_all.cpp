@@ -56,8 +56,9 @@ rr::rr_all::exec(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
         if (r->name() == this->name())
             continue;
 
-        if (r->exec(ui, cmdline, user_config) != EXIT_SUCCESS)
-            return EXIT_FAILURE;
+        int error = r->exec(ui, cmdline, user_config);
+        if (error != EXIT_SUCCESS)
+            return error;
     }
 
     return EXIT_SUCCESS;

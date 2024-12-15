@@ -53,3 +53,31 @@ rr::resolvers()
 {
     return _resolvers;
 }
+
+
+int
+rr::run(const std::vector< std::string >& resolver_names,
+        cmdline::ui* ui,
+        const cmdline::parsed_cmdline& cmdline,
+        const config::tree& user_config)
+{
+    for (auto rname : resolver_names) {
+        std::shared_ptr< rr::interface > resolver = nullptr;
+        for (auto r : rr::resolvers())
+            if (r->name() == rname) {
+                resolver = r;
+                break;
+            }
+
+        if (resolver == nullptr) {
+            ui->out(F("Unknown requirement resolver: %s") % rname);
+            return EXIT_FAILURE;
+        }
+
+        if (resolver->exec(ui, cmdline, user_config) != EXIT_SUCCESS)
+            // suppress the actual code -- main limits possible exit codes
+            return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}

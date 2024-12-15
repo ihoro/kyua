@@ -69,8 +69,9 @@ public:
     /// \param user_config The runtime configuration of the program.
     ///
     /// \return 0 to indicate success.
-    virtual int exec(cmdline::ui*, const cmdline::parsed_cmdline&,
-                     const config::tree&) const = 0;
+    virtual int exec(cmdline::ui* ui,
+                     const cmdline::parsed_cmdline& cmdline,
+                     const config::tree& user_config) const = 0;
 };
 
 
@@ -84,6 +85,20 @@ void register_resolver(const std::shared_ptr< interface > resolver);
 ///
 /// \return A vector of pointers to requirement resolvers.
 const std::vector< std::shared_ptr< interface > > resolvers();
+
+
+/// Run named resolvers.
+///
+/// \param resolver_names Names of resolvers to run.
+/// \param ui Object to interact with the I/O of the program.
+/// \param cmdline Representation of the command line to the subcommand.
+/// \param user_config The runtime configuration of the program.
+///
+/// \return 0 to indicate success.
+int run(const std::vector< std::string >& resolver_names,
+        cmdline::ui* ui,
+        const cmdline::parsed_cmdline& cmdline,
+        const config::tree& user_config);
 
 
 }  // namespace rr

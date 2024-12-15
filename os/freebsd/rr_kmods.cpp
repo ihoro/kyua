@@ -129,7 +129,7 @@ rr_kmods::exec(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
             continue;
         ui->err(F("kldload %s: ") % m, false);
         ui->err(strerror(errno));
-        return EXIT_FAILURE;
+        return errno;
     }
 
     return EXIT_SUCCESS;
