@@ -32,6 +32,7 @@
 
 #include "cli/common.ipp"
 #include "drivers/run_tests.hpp"
+#include "engine/rr/rr.hpp"
 #include "model/test_program.hpp"
 #include "model/test_result.hpp"
 #include "store/layout.hpp"
@@ -48,6 +49,7 @@ namespace config = utils::config;
 namespace datetime = utils::datetime;
 namespace fs = utils::fs;
 namespace layout = store::layout;
+namespace rr = engine::rr;
 
 using cli::cmd_test;
 
@@ -124,6 +126,11 @@ public:
 };
 
 
+const cmdline::list_option rr_option(
+    "rr", "Comma-separated list of requirement resolvers to run before testing",
+    "resolvers");
+
+
 }  // anonymous namespace
 
 
@@ -134,6 +141,7 @@ cmd_test::cmd_test(void) : cli_command(
     add_option(build_root_option);
     add_option(kyuafile_option);
     add_option(results_file_create_option);
+    add_option(rr_option);
 }
 
 
@@ -148,6 +156,14 @@ int
 cmd_test::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
               const config::tree& user_config)
 {
+    if (cmdline.has_option(rr_option.long_name())) {
+        const auto resolver_names =
+            cmdline.get_option< cmdline::list_option >(rr_option.long_name());
+        int error = rr::run(resolver_names, ui, cmdline, user_config);
+        if (error != EXIT_SUCCESS)
+            return error;
+    }
+
     const layout::results_id_file_pair results = layout::new_db(
         results_file_create(cmdline), kyuafile_path(cmdline).branch_path());
 

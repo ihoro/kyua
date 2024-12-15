@@ -26,22 +26,12 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-FREEBSD_CFLAGS = $(LUTOK_CFLAGS)
-FREEBSD_LIBS = libfreebsd.la $(LUTOK_LIBS)
+ENGINE_RR_CFLAGS = $(MODEL_CFLAGS) $(LUTOK_CFLAGS)
+ENGINE_RR_LIBS = libengine_rr.la $(MODEL_LIBS) $(LUTOK_LIBS)
 
-noinst_LTLIBRARIES += libfreebsd.la
-libfreebsd_la_CPPFLAGS = -DGDB=\"$(GDB)\" $(LUTOK_CFLAGS)
-libfreebsd_la_SOURCES  = os/freebsd/main.hpp
-libfreebsd_la_SOURCES += os/freebsd/main.cpp
-libfreebsd_la_SOURCES += os/freebsd/execenv_jail.hpp
-libfreebsd_la_SOURCES += os/freebsd/execenv_jail_manager.hpp
-libfreebsd_la_SOURCES += os/freebsd/execenv_jail_manager.cpp
-
-if FreeBSD
-FREEBSD_LIBS += -ljail
-libfreebsd_la_SOURCES += os/freebsd/execenv_jail.cpp
-libfreebsd_la_SOURCES += os/freebsd/rr_kmods.cpp
-include os/freebsd/utils/Makefile.am.inc
-else
-libfreebsd_la_SOURCES += os/freebsd/execenv_jail_stub.cpp
-endif
+noinst_LTLIBRARIES += libengine_rr.la
+libengine_rr_la_CPPFLAGS = $(LUTOK_CFLAGS)
+libengine_rr_la_SOURCES  = engine/rr/rr.hpp
+libengine_rr_la_SOURCES += engine/rr/rr.cpp
+libengine_rr_la_SOURCES += engine/rr/rr_all.hpp
+libengine_rr_la_SOURCES += engine/rr/rr_all.cpp
