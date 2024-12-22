@@ -26,28 +26,33 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-/// \file cli/cmd_rr.hpp
-/// Provides the cmd_rr class.
+#include "cli/cmd_prepare.hpp"
 
-#if !defined(CLI_CMD_RR_HPP)
-#define CLI_CMD_RR_HPP
+#include <atf-c++.hpp>
 
-#include "cli/common.hpp"
+#include "cli/common.ipp"
+#include "engine/config.hpp"
+#include "utils/cmdline/parser.hpp"
+#include "utils/cmdline/ui_mock.hpp"
+#include "utils/config/tree.ipp"
 
-namespace cli {
+namespace cmdline = utils::cmdline;
 
 
-/// Implementation of the "rr" subcommand.
-class cmd_rr : public cli_command
+ATF_TEST_CASE_WITHOUT_HEAD(list_resolvers);
+ATF_TEST_CASE_BODY(list_resolvers)
 {
-public:
-    cmd_rr(void);
+    cmdline::args_vector args;
 
-    int run(utils::cmdline::ui*, const utils::cmdline::parsed_cmdline&,
-            const utils::config::tree&);
-};
+    cli::cmd_prepare cmd;
+    cmdline::ui_mock ui;
 
+    ATF_REQUIRE_EQ(EXIT_SUCCESS, cmd.main(&ui, args, engine::default_config()));
+    ATF_REQUIRE(ui.out_log().empty());
+    ATF_REQUIRE(ui.err_log().empty());
+}
 
-}  // namespace cli
-
-#endif  // !defined(CLI_CMD_RR_HPP)
+ATF_INIT_TEST_CASES(tcs)
+{
+    ATF_ADD_TEST_CASE(tcs, list_resolvers);
+}

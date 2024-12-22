@@ -26,7 +26,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "cli/cmd_rr.hpp"
+#include "cli/cmd_prepare.hpp"
 
 #include "cli/common.ipp"
 #include "engine/rr/rr.hpp"
@@ -36,12 +36,12 @@ namespace cmdline = utils::cmdline;
 namespace config = utils::config;
 namespace rr = engine::rr;
 
-using cli::cmd_rr;
+using cli::cmd_prepare;
 
 
-/// Default constructor for cmd_rr.
-cmd_rr::cmd_rr(void) : cli_command(
-    "rr", "[resolver-name ...]", 0, -1, "Run requirement resolvers")
+/// Default constructor for cmd_prepare.
+cmd_prepare::cmd_prepare(void) : cli_command(
+    "prepare", "[resolver-name ...]", 0, -1, "Run requirement resolvers")
 {
     add_option(kyuafile_option);
     add_option(build_root_option);
@@ -49,7 +49,7 @@ cmd_rr::cmd_rr(void) : cli_command(
 }
 
 
-/// Entry point for the "rr" subcommand.
+/// Entry point for the "prepare" subcommand.
 ///
 /// \param ui Object to interact with the I/O of the program.
 /// \param cmdline Representation of the command line to the subcommand.
@@ -57,7 +57,7 @@ cmd_rr::cmd_rr(void) : cli_command(
 ///
 /// \return 0 if successful, 1 otherwise.
 int
-cmd_rr::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
+cmd_prepare::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
             const config::tree& user_config)
 {
     // List available resolvers
