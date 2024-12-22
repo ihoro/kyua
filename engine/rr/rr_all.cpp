@@ -29,7 +29,7 @@
 #include "engine/rr/rr_all.hpp"
 
 static const std::string _name = "all";
-static const std::string _description = "Run all requirement resolvers";
+static const std::string _description = "Run all preparations";
 
 namespace rr = engine::rr;
 

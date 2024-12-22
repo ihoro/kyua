@@ -46,7 +46,7 @@ namespace {
 
 
 static const std::string _name = "kmods";
-static const std::string _description = "Resolve required_kmods for FreeBSD";
+static const std::string _description = "FreeBSD: kldload modules declared using required_kmods metadata";
 
 
 /// Hooks for list_tests to examine test cases as they come.

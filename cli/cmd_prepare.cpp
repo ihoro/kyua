@@ -41,7 +41,8 @@ using cli::cmd_prepare;
 
 /// Default constructor for cmd_prepare.
 cmd_prepare::cmd_prepare(void) : cli_command(
-    "prepare", "[resolver-name ...]", 0, -1, "Run requirement resolvers")
+    "prepare", "[resolver-name ...]", 0, -1,
+    "Prepare env and resolve requirements before testing")
 {
     add_option(kyuafile_option);
     add_option(build_root_option);
