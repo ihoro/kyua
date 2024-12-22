@@ -126,9 +126,9 @@ public:
 };
 
 
-const cmdline::list_option rr_option(
-    "rr", "Comma-separated list of requirement resolvers to run before testing",
-    "resolvers");
+const cmdline::list_option prepare_option(
+    'p', "prepare", "Comma-separated list of requirement resolvers to run before testing",
+    "resolver-names");
 
 
 }  // anonymous namespace
@@ -141,7 +141,7 @@ cmd_test::cmd_test(void) : cli_command(
     add_option(build_root_option);
     add_option(kyuafile_option);
     add_option(results_file_create_option);
-    add_option(rr_option);
+    add_option(prepare_option);
 }
 
 
@@ -156,9 +156,9 @@ int
 cmd_test::run(cmdline::ui* ui, const cmdline::parsed_cmdline& cmdline,
               const config::tree& user_config)
 {
-    if (cmdline.has_option(rr_option.long_name())) {
-        const auto resolver_names =
-            cmdline.get_option< cmdline::list_option >(rr_option.long_name());
+    if (cmdline.has_option(prepare_option.long_name())) {
+        const auto resolver_names = cmdline.get_option< cmdline::list_option >(
+                                        prepare_option.long_name());
         int error = rr::run(resolver_names, ui, cmdline, user_config);
         if (error != EXIT_SUCCESS)
             return error;
