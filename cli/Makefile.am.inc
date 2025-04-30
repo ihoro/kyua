@@ -44,6 +44,8 @@ libcli_la_SOURCES += cli/cmd_help.cpp
 libcli_la_SOURCES += cli/cmd_help.hpp
 libcli_la_SOURCES += cli/cmd_list.cpp
 libcli_la_SOURCES += cli/cmd_list.hpp
+libcli_la_SOURCES += cli/cmd_prepare.cpp
+libcli_la_SOURCES += cli/cmd_prepare.hpp
 libcli_la_SOURCES += cli/cmd_report.cpp
 libcli_la_SOURCES += cli/cmd_report.hpp
 libcli_la_SOURCES += cli/cmd_report_html.cpp
@@ -100,6 +102,11 @@ tests_cli_PROGRAMS += cli/cmd_list_test
 cli_cmd_list_test_SOURCES = cli/cmd_list_test.cpp
 cli_cmd_list_test_CXXFLAGS = $(CLI_CFLAGS) $(ATF_CXX_CFLAGS)
 cli_cmd_list_test_LDADD = $(CLI_LIBS) $(ATF_CXX_LIBS)
+
+tests_cli_PROGRAMS += cli/cmd_prepare_test
+cli_cmd_prepare_test_SOURCES = cli/cmd_prepare_test.cpp
+cli_cmd_prepare_test_CXXFLAGS = $(CLI_CFLAGS) $(ATF_CXX_CFLAGS)
+cli_cmd_prepare_test_LDADD = $(CLI_LIBS) $(ATF_CXX_LIBS)
 
 tests_cli_PROGRAMS += cli/cmd_test_test
 cli_cmd_test_test_SOURCES = cli/cmd_test_test.cpp

@@ -26,38 +26,33 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "os/freebsd/main.hpp"
+#include "cli/cmd_prepare.hpp"
 
-#include "engine/execenv/execenv.hpp"
-#include "os/freebsd/execenv_jail_manager.hpp"
+#include <atf-c++.hpp>
 
-#include "engine/rr/rr.hpp"
-#include "os/freebsd/rr_kmods.hpp"
+#include "cli/common.ipp"
+#include "engine/config.hpp"
+#include "utils/cmdline/parser.hpp"
+#include "utils/cmdline/ui_mock.hpp"
+#include "utils/config/tree.ipp"
 
-namespace execenv = engine::execenv;
-namespace rr = engine::rr;
+namespace cmdline = utils::cmdline;
 
 
-/// FreeBSD related features initialization.
-///
-/// \param argc The number of arguments passed on the command line.
-/// \param argv NULL-terminated array containing the command line arguments.
-///
-/// \return 0 on success, some other integer on error.
-///
-/// \throw std::exception This throws any uncaught exception.  Such exceptions
-///     are bugs, but we let them propagate so that the runtime will abort and
-///     dump core.
-int
-freebsd::main(const int, const char* const* const)
+ATF_TEST_CASE_WITHOUT_HEAD(list_resolvers);
+ATF_TEST_CASE_BODY(list_resolvers)
 {
-    execenv::register_execenv(
-        std::shared_ptr< execenv::manager >(new freebsd::execenv_jail_manager())
-    );
+    cmdline::args_vector args;
 
-#ifdef __FreeBSD__
-    rr::register_resolver(std::shared_ptr< rr::interface >(new freebsd::rr_kmods()));
-#endif
+    cli::cmd_prepare cmd;
+    cmdline::ui_mock ui;
 
-    return 0;
+    ATF_REQUIRE_EQ(EXIT_SUCCESS, cmd.main(&ui, args, engine::default_config()));
+    ATF_REQUIRE(ui.out_log().empty());
+    ATF_REQUIRE(ui.err_log().empty());
+}
+
+ATF_INIT_TEST_CASES(tcs)
+{
+    ATF_ADD_TEST_CASE(tcs, list_resolvers);
 }
